@@ -74,6 +74,100 @@ void NanAODEgammaReader::Init(TTree *tree)
    fCurrent = -1;
    fChain->SetMakeClass(1);
 
+      
+   fChain->SetBranchStatus("*", 0);
+   fChain->SetBranchStatus("run", 1);
+   fChain->SetBranchStatus("luminosityBlock", 1);
+   fChain->SetBranchStatus("event", 1);
+   fChain->SetBranchStatus("bunchCrossing", 1);
+   fChain->SetBranchStatus("BeamSpot_sigmaZ", 1);
+   fChain->SetBranchStatus("BeamSpot_sigmaZError", 1);
+   fChain->SetBranchStatus("BeamSpot_z", 1);
+   fChain->SetBranchStatus("BeamSpot_zError", 1);
+   fChain->SetBranchStatus("BeamSpot_type", 1);
+
+   fChain->SetBranchStatus("nElectron", 1);
+   fChain->SetBranchStatus("Electron_deltaEtaSC", 1);
+   fChain->SetBranchStatus("Electron_dr03EcalRecHitSumEt", 1);
+   fChain->SetBranchStatus("Electron_dr03HcalDepth1TowerSumEt", 1);
+   fChain->SetBranchStatus("Electron_dr03TkSumPt", 1);
+   fChain->SetBranchStatus("Electron_dr03TkSumPtHEEP", 1);
+   fChain->SetBranchStatus("Electron_dxy", 1);
+   fChain->SetBranchStatus("Electron_dxyErr", 1);
+   fChain->SetBranchStatus("Electron_dz", 1);
+   fChain->SetBranchStatus("Electron_dzErr", 1);
+   fChain->SetBranchStatus("Electron_eInvMinusPInv", 1);
+   fChain->SetBranchStatus("Electron_energyErr", 1);
+   fChain->SetBranchStatus("Electron_eta", 1);
+   fChain->SetBranchStatus("Electron_hoe", 1);
+   fChain->SetBranchStatus("Electron_ip3d", 1);
+   fChain->SetBranchStatus("Electron_jetPtRelv2", 1);
+   fChain->SetBranchStatus("Electron_jetRelIso", 1);
+   fChain->SetBranchStatus("Electron_mass", 1);
+   fChain->SetBranchStatus("Electron_miniPFRelIso_all", 1);
+   fChain->SetBranchStatus("Electron_miniPFRelIso_chg", 1);
+   fChain->SetBranchStatus("Electron_mvaHZZIso",1);
+   fChain->SetBranchStatus("Electron_mvaIso",1);
+   fChain->SetBranchStatus("Electron_mvaNoIso",1);
+   fChain->SetBranchStatus("Electron_pfRelIso03_all",1);
+   fChain->SetBranchStatus("Electron_pfRelIso03_chg", 1);
+   fChain->SetBranchStatus("Electron_phi",1);
+   fChain->SetBranchStatus("Electron_pt",1);
+   fChain->SetBranchStatus("Electron_r9", 1);
+   fChain->SetBranchStatus("Electron_scEtOverPt", 1);
+   fChain->SetBranchStatus("Electron_sieie", 1);
+   fChain->SetBranchStatus("Electron_sip3d", 1);
+   fChain->SetBranchStatus("Electron_mvaTTH", 1);
+   fChain->SetBranchStatus("Electron_charge", 1);
+   fChain->SetBranchStatus("Electron_cutBased", 1);
+   fChain->SetBranchStatus("Electron_jetIdx", 1);
+   fChain->SetBranchStatus("Electron_pdgId", 1);
+   fChain->SetBranchStatus("Electron_photonIdx", 1);
+   fChain->SetBranchStatus("Electron_tightCharge", 1);
+   fChain->SetBranchStatus("Electron_vidNestedWPBitmap", 1);
+   fChain->SetBranchStatus("Electron_vidNestedWPBitmapHEEP", 1);
+   fChain->SetBranchStatus("Electron_fsrPhotonIdx", 1);
+   fChain->SetBranchStatus("Electron_convVeto", 1);
+   fChain->SetBranchStatus("Electron_cutBased_HEEP", 1);
+   fChain->SetBranchStatus("Electron_isPFcand", 1);
+   fChain->SetBranchStatus("Electron_jetNDauCharged", 1);
+   fChain->SetBranchStatus("Electron_lostHits", 1);
+   fChain->SetBranchStatus("Electron_mvaIso_WP80", 1);
+   fChain->SetBranchStatus("Electron_mvaIso_WP90", 1);
+   fChain->SetBranchStatus("Electron_mvaIso_WPL", 1);
+   fChain->SetBranchStatus("Electron_mvaNoIso_WP80", 1);
+   fChain->SetBranchStatus("Electron_mvaNoIso_WP90", 1);
+   fChain->SetBranchStatus("Electron_mvaNoIso_WPL", 1);
+   fChain->SetBranchStatus("Electron_seedGain", 1);
+
+
+   fChain->SetBranchStatus("nTrigObj", 1);
+   fChain->SetBranchStatus("TrigObj_pt", 1);
+   fChain->SetBranchStatus("TrigObj_eta", 1);
+   fChain->SetBranchStatus("TrigObj_phi", 1);
+   fChain->SetBranchStatus("TrigObj_l1pt", 1);
+   fChain->SetBranchStatus("TrigObj_l1pt_2",1);
+   fChain->SetBranchStatus("TrigObj_l2pt", 1);
+   fChain->SetBranchStatus("TrigObj_id", 1);
+   fChain->SetBranchStatus("TrigObj_l1iso", 1);
+   fChain->SetBranchStatus("TrigObj_l1charge", 1);
+   fChain->SetBranchStatus("TrigObj_filterBits", 1);
+   fChain->SetBranchStatus("nOtherPV", 1);
+   fChain->SetBranchStatus("OtherPV_z", 1);
+   fChain->SetBranchStatus("OtherPV_score", 1);
+   fChain->SetBranchStatus("PV_ndof", 1);
+   fChain->SetBranchStatus("PV_x", 1);
+   fChain->SetBranchStatus("PV_y",1);
+   fChain->SetBranchStatus("PV_z", 1);
+   fChain->SetBranchStatus("PV_chi2", 1);
+   fChain->SetBranchStatus("PV_score", 1);
+   fChain->SetBranchStatus("PV_npvs", 1);
+   fChain->SetBranchStatus("PV_npvsGood", 1);
+
+
+  
+
+   
    fChain->SetBranchAddress("run", &run, &b_run);
    fChain->SetBranchAddress("luminosityBlock", &luminosityBlock, &b_luminosityBlock);
    fChain->SetBranchAddress("event", &event, &b_event);
@@ -83,6 +177,7 @@ void NanAODEgammaReader::Init(TTree *tree)
    fChain->SetBranchAddress("BeamSpot_z", &BeamSpot_z, &b_BeamSpot_z);
    fChain->SetBranchAddress("BeamSpot_zError", &BeamSpot_zError, &b_BeamSpot_zError);
    fChain->SetBranchAddress("BeamSpot_type", &BeamSpot_type, &b_BeamSpot_type);
+/*
    fChain->SetBranchAddress("nboostedTau", &nboostedTau, &b_nboostedTau);
    fChain->SetBranchAddress("boostedTau_chargedIso", boostedTau_chargedIso, &b_boostedTau_chargedIso);
    fChain->SetBranchAddress("boostedTau_eta", boostedTau_eta, &b_boostedTau_eta);
@@ -124,6 +219,7 @@ void NanAODEgammaReader::Init(TTree *tree)
    fChain->SetBranchAddress("DeepMETResolutionTune_pt", &DeepMETResolutionTune_pt, &b_DeepMETResolutionTune_pt);
    fChain->SetBranchAddress("DeepMETResponseTune_phi", &DeepMETResponseTune_phi, &b_DeepMETResponseTune_phi);
    fChain->SetBranchAddress("DeepMETResponseTune_pt", &DeepMETResponseTune_pt, &b_DeepMETResponseTune_pt);
+*/
    fChain->SetBranchAddress("nElectron", &nElectron, &b_nElectron);
    fChain->SetBranchAddress("Electron_deltaEtaSC", Electron_deltaEtaSC, &b_Electron_deltaEtaSC);
    fChain->SetBranchAddress("Electron_dr03EcalRecHitSumEt", Electron_dr03EcalRecHitSumEt, &b_Electron_dr03EcalRecHitSumEt);
@@ -177,6 +273,7 @@ void NanAODEgammaReader::Init(TTree *tree)
    fChain->SetBranchAddress("Electron_mvaNoIso_WP90", Electron_mvaNoIso_WP90, &b_Electron_mvaNoIso_WP90);
    fChain->SetBranchAddress("Electron_mvaNoIso_WPL", Electron_mvaNoIso_WPL, &b_Electron_mvaNoIso_WPL);
    fChain->SetBranchAddress("Electron_seedGain", Electron_seedGain, &b_Electron_seedGain);
+/*
    fChain->SetBranchAddress("nFatJet", &nFatJet, &b_nFatJet);
    fChain->SetBranchAddress("FatJet_area", FatJet_area, &b_FatJet_area);
    fChain->SetBranchAddress("FatJet_btagCSVV2", FatJet_btagCSVV2, &b_FatJet_btagCSVV2);
@@ -546,6 +643,8 @@ void NanAODEgammaReader::Init(TTree *tree)
    fChain->SetBranchAddress("TkMET_phi", &TkMET_phi, &b_TkMET_phi);
    fChain->SetBranchAddress("TkMET_pt", &TkMET_pt, &b_TkMET_pt);
    fChain->SetBranchAddress("TkMET_sumEt", &TkMET_sumEt, &b_TkMET_sumEt);
+ */
+
    fChain->SetBranchAddress("nTrigObj", &nTrigObj, &b_nTrigObj);
    fChain->SetBranchAddress("TrigObj_pt", TrigObj_pt, &b_TrigObj_pt);
    fChain->SetBranchAddress("TrigObj_eta", TrigObj_eta, &b_TrigObj_eta);
@@ -568,6 +667,7 @@ void NanAODEgammaReader::Init(TTree *tree)
    fChain->SetBranchAddress("PV_score", &PV_score, &b_PV_score);
    fChain->SetBranchAddress("PV_npvs", &PV_npvs, &b_PV_npvs);
    fChain->SetBranchAddress("PV_npvsGood", &PV_npvsGood, &b_PV_npvsGood);
+/*
    fChain->SetBranchAddress("nSV", &nSV, &b_nSV);
    fChain->SetBranchAddress("SV_dlen", SV_dlen, &b_SV_dlen);
    fChain->SetBranchAddress("SV_dlenSig", SV_dlenSig, &b_SV_dlenSig);
@@ -1658,6 +1758,7 @@ void NanAODEgammaReader::Init(TTree *tree)
    fChain->SetBranchAddress("HLT_DoubleEle9_eta1p22_mMax6_trkHits10", &HLT_DoubleEle9_eta1p22_mMax6_trkHits10, &b_HLT_DoubleEle9_eta1p22_mMax6_trkHits10);
    fChain->SetBranchAddress("HLT_DoubleEle9p5_eta1p22_mMax6_trkHits10", &HLT_DoubleEle9p5_eta1p22_mMax6_trkHits10, &b_HLT_DoubleEle9p5_eta1p22_mMax6_trkHits10);
    fChain->SetBranchAddress("HLT_DoubleEle10_eta1p22_mMax6_trkHits10", &HLT_DoubleEle10_eta1p22_mMax6_trkHits10, &b_HLT_DoubleEle10_eta1p22_mMax6_trkHits10);
+*/
    Notify();
 }
 
@@ -1718,6 +1819,7 @@ void NanAODEgammaReader::Loop(int argc, char** argv)
    fChain=0;
    TChain *chain=new TChain("Events");
    chain->Add("root://cms-xrd-global.cern.ch//store/data/Run2022F/EGamma/NANOAOD/PromptNanoAODv10_v1-v2/2520000/0b712b83-6cdd-4c3c-b7e6-35ac3fd3873e.root");
+   chain->Add("root://cms-xrd-global.cern.ch//store/data/Run2022F/EGamma/NANOAOD/PromptNanoAODv10_v1-v2/2520000/30a6dc99-0e45-4306-acf6-103e611c5b48.root");
 //   for(int fnum=1;fnum<argc;fnum++){
 //        chain->Add(Form("root://cms-xrd-global.cern.ch/%s",argv[fnum]));
  //       std::cout<<Form("root://cms-xrd-global.cern.ch/%s",argv[fnum])<<endl;
@@ -1778,7 +1880,7 @@ void NanAODEgammaReader::Loop(int argc, char** argv)
       if ((nElectron!=2) or (nTrigObj<2)) continue;
       int first  = rand()%2;
       int second = (first+1)%2;
-      cout<<"first : second = "<<first<<"  "<<second<<endl;     
+    //  cout<<"first : second = "<<first<<"  "<<second<<endl;     
       if(Electron_charge[first] * Electron_charge[second]>0)continue;
       bool tag_EleId = (Electron_cutBased[first]==4) ? true : false;
       bool tag_EleKin = Electron_pt[first]>ptTag && fabs(Electron_eta[first])<2.5;
