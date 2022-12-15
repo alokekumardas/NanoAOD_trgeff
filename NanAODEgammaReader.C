@@ -1687,6 +1687,32 @@ Int_t NanAODEgammaReader::Cut(Long64_t entry)
    return 1;
 }
 #endif // #ifdef NanAODEgammaReader_cxx
+
+double NanAODEgammaReader::dR(double eta1, double phi1, double eta2, double phi2){
+     double dphi = phi2 - phi1;
+     double deta = eta2 - eta1;
+     static const double pi = TMath::Pi();
+     dphi = TMath::Abs( TMath::Abs(dphi) - pi ) - pi;
+     return TMath::Sqrt( dphi*dphi + deta*deta );
+ }
+bool NanAODEgammaReader::HWW_Electron_NewDef(int i, double eta)
+{
+	bool tightid = false;
+	if (Electron_cutBased[i]==4) tightid=true;
+	if(fabs(eta) < 1.479){    // Barrel
+		if (!tightid) return false;
+		if (fabs(Electron_dxy[i])>=0.05) return false;
+		if (fabs(Electron_dz[i])>=0.1) return false;
+	}
+	else{ //Endcap
+		if (!tightid) return false;
+		if (fabs(Electron_dxy[i])>=0.1) return false;
+		if (fabs(Electron_dz[i])>=0.2) return false;
+	}
+return true;
+}
+
+
 void NanAODEgammaReader::Loop(int argc, char** argv)
 {
    fChain=0;
@@ -1699,16 +1725,118 @@ void NanAODEgammaReader::Loop(int argc, char** argv)
 //
    Init(chain);
    Long64_t nentries = fChain->GetEntriesFast();
-
    Long64_t nbytes = 0, nb = 0;
 
-   for (Long64_t jentry=0; jentry<100;jentry++) {
+   TFile *file = new TFile("output.root","RECREATE");
+   double ptTag = 32;
+   double zMassL = 60;
+   double zMassR = 120;
+
+
+   double eta_bins[19] = {-2.5,-2.4,-2.3,-2.2,-2.1,-1.566,-1.4442,-0.8,-0.4,0,0.4,0.8,1.4442,1.566,2.1,2.2,2.3,2.4,2.5};
+   double pt_bins_Ele32[15] = {0,30,32,33,34,35,36,37,38,40,45,50,60,100,200};
+   double pt_bins_Ele25[16] = {0,25,26,27,28,30,32,35,40,45,50,60,70,80,100,200};
+   double pt_bins_Ele27[16] = {0,27,28,29,30,31,32,35,40,45,50,60,70,80,100,200};
+   double pt_bins_Ele23_Ele12_leg1[14] = {0,20,23,24,25,26,30,35,40,45,50,60,100,200};
+   double pt_bins_Ele23_Ele12_leg2[16] = {0,10,12,13,14,15,20,25,30,35,40,45,50,60,100,200};
+   double pt_bins_Ele115[15] = {0,110,115,116,117,119,122,125,130,140,150,160,175,200,500};
+   double pt_bins_Ele50[15] = {0,50,51,52,53,55,57,60,65,70,80,90,100,150,200};
+
+   double eta_bins_115[11] = {-2.5,-2.0,-1.566,-1.4442,-0.8,0,0.8,1.4442,1.566,2.0,2.5};
+
+   double PU_bins[8] = {0,20,30,40,50,60,70,100};
+
+
+   TH1F *h_PU_total = new TH1F("PU_total","pu",7,PU_bins);
+   TH1F *h_PU_pass = new TH1F("PU_pass","pu",7,PU_bins);
+
+   TH1F *h_pt_total = new TH1F("pt_total","pt",14,pt_bins_Ele32);
+   TH1F *h_eta_total = new TH1F("eta_total","eta",18,eta_bins);
+   TH2F *h_pt_eta_total = new TH2F("pt_eta_total","pt_eta",18,eta_bins,14,pt_bins_Ele32);
+   TH1F *h_pt_pass = new TH1F("pt_pass","pt",14,pt_bins_Ele32);
+   TH1F *h_eta_pass = new TH1F("eta_pass","eta",18,eta_bins);
+   TH2F *h_pt_eta_pass = new TH2F("pt_eta_pass","pt_eta",18,eta_bins,14,pt_bins_Ele32);
+
+   h_PU_total->Sumw2();
+   h_PU_pass->Sumw2();
+
+
+   h_pt_total->Sumw2();
+   h_eta_total->Sumw2();
+   h_pt_eta_total->Sumw2();
+   h_pt_pass->Sumw2();
+   h_eta_pass->Sumw2();
+   h_pt_eta_pass->Sumw2();
+
+   
+
+
+   for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = LoadTree(jentry);
       if (ientry < 0) break;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
-      cout<<" HLT is "<<HLT_Ele32_WPTight_Gsf<<endl;
+      if ((nElectron!=2) or (nTrigObj<2)) continue;
+      int first  = rand()%2;
+      int second = (first+1)%2;
+      cout<<"first : second = "<<first<<"  "<<second<<endl;     
+      if(Electron_charge[first] * Electron_charge[second]>0)continue;
+      bool tag_EleId = (Electron_cutBased[first]==4) ? true : false;
+      bool tag_EleKin = Electron_pt[first]>ptTag && fabs(Electron_eta[first])<2.5;
+      bool tag_TriggerMatch=false;
+      //DR match the tag electron to a trigger object
+      int tagMatchObj_Ind=-1;
+      for(int j=0;j<nTrigObj;j++)
+      	{
+         double tag_objDR=dR( Electron_eta[first],  Electron_phi[first], TrigObj_eta[j], TrigObj_phi[j]);
+	 if(tag_objDR<0.1) tagMatchObj_Ind=j ;
+	}
 
-   }
+      // check it's filterbits  and find tag passes the trigger
+      if(TrigObj_pt[tagMatchObj_Ind]>32 && abs(TrigObj_id[tagMatchObj_Ind])==11  && (TrigObj_filterBits[tagMatchObj_Ind] & 2)==2 ) tag_TriggerMatch=true; //tag has passes trigger criteria HLT_ELe32_WPTight_Gsf by checking if it passeds the filter "hltEle32WPTightGsfTrackIsoFilter"
+
+      if(!(tag_EleId && tag_EleKin && tag_TriggerMatch))continue;
+
+      bool probe_EleId = HWW_Electron_NewDef(second, Electron_eta[second]);
+      bool probe_EleKin = fabs(Electron_eta[second])<2.5;
+      if(!(probe_EleId && probe_EleKin)) continue;
+      bool passFilterProbe=false;
+      int ProbeMatchObj_Ind=-1;
+      //DR match the probe electron to a trigger object
+      for(int k=0;k<nTrigObj;k++)
+      	{
+         double probe_objDR=dR( Electron_eta[second],  Electron_phi[second], TrigObj_eta[k], TrigObj_phi[k]);
+	 if(probe_objDR<0.1) ProbeMatchObj_Ind=k ;
+	}
+     //check it's filterbits and find probe passes the filter "hltEle32WPTightGsfTrackIsoFilter"
+      if(TrigObj_pt[ProbeMatchObj_Ind]>32 && abs(TrigObj_id[ProbeMatchObj_Ind])==11 && (TrigObj_filterBits[ProbeMatchObj_Ind] & 2)==2) passFilterProbe=true; //probe has passed  the filter "hltEle32WPTightGsfTrackIsoFilter"
+
+
+      TLorentzVector tag_eleLV, probe_eleLV, Z_candLV;
+      tag_eleLV.SetPtEtaPhiM(Electron_pt[first], Electron_eta[first], Electron_phi[first],0.);
+      probe_eleLV.SetPtEtaPhiM(Electron_pt[second], Electron_eta[second], Electron_phi[second],0.);
+      Z_candLV = tag_eleLV + probe_eleLV;
+
+      if (Z_candLV.M()<zMassL || Z_candLV.M() > zMassR) continue;
+
+
+      // fill all probe histogram
+      if(Electron_pt[second]>40)h_PU_total->Fill(PV_npvs);
+      h_pt_total->Fill(Electron_pt[second]);
+      if(Electron_pt[second]>40)h_eta_total->Fill(Electron_eta[second]);
+      h_pt_eta_total->Fill(Electron_eta[second],Electron_pt[second]);
+      
+      // fill pass probe histogram
+      if (passFilterProbe){
+      if(Electron_pt[second]>40)h_PU_pass->Fill(PV_npvs);
+      h_pt_pass->Fill(Electron_pt[second]);
+      if(Electron_pt[second]>40)h_eta_pass->Fill(Electron_eta[second]);
+      h_pt_eta_pass->Fill(Electron_eta[second],Electron_pt[second]);
+      }
+
+
+   } //event loop ends
+
+  file->Write();
 }
 
 
